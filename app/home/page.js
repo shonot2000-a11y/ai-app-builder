@@ -1,40 +1,50 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "../../lib/supabase";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function HomePage() {
   const router = useRouter();
-  const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    const getUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      if (user) {
-        setUser(user);
-      } else {
-        // אם אין משתמש מחובר → מחזירים לדף התחברות
-        router.push("/auth");
-      }
-    };
-
-    getUser();
-  }, [router]);
-
-  const logout = async () => {
+  const handleLogout = async () => {
     await supabase.auth.signOut();
     router.push("/auth");
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>ברוך הבא!</h1>
-      {user && <p>נכנסת עם האימייל: {user.email}</p>}
-      <button onClick={logout}>התנתק</button>
+    <div className="flex flex-col items-center justify-center min-h-screen text-center">
+      <h1 className="text-4xl font-bold mb-6">ברוך הבא ל־AI App Builder 🚀</h1>
+      <p className="mb-8 text-lg">
+        כאן תוכל לבנות אפליקציות באמצעות בינה מלאכותית – בלי לכתוב שורת קוד אחת!
+      </p>
+
+      <div className="flex flex-col gap-4 w-full max-w-xs mb-12">
+        <button
+          onClick={() => router.push("/builder")}
+          className="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 w-full"
+        >
+          ⚡ עבור למחולל אפליקציות
+        </button>
+        <button
+          onClick={() => router.push("/admin/dashboard")}
+          className="bg-green-600 text-white px-6 py-3 rounded-xl hover:bg-green-700 w-full"
+        >
+          🛠️ עבור ללוח ניהול
+        </button>
+        <button
+          onClick={() => router.push("/auth")}
+          className="bg-gray-700 text-white px-6 py-3 rounded-xl hover:bg-gray-800 w-full"
+        >
+          🔑 התחברות
+        </button>
+      </div>
+
+      <button
+        onClick={handleLogout}
+        className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
+      >
+        🚪 התנתק
+      </button>
     </div>
   );
 }
