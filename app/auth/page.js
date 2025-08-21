@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "../../lib/supabase";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function AuthPage() {
   const router = useRouter();
@@ -39,7 +39,7 @@ export default function AuthPage() {
     if (error) {
       alert("שגיאה בהתחברות: " + error.message);
     } else {
-      router.push("/home"); // מעבר לדף הבית אחרי התחברות מוצלחת
+      router.push("/"); // מעבר לדף הבית אחרי התחברות מוצלחת
     }
   };
 

@@ -1,9 +1,11 @@
+import { NextResponse } from "next/server";
+
 export async function POST(req) {
   try {
     const { prompt } = await req.json();
 
     const response = await fetch(
-      "https://api-inference.huggingface.co/models/bigcode/starcoder",
+      "https://api-inference.huggingface.co/models/gpt2", // אפשר לשנות מודל
       {
         method: "POST",
         headers: {
@@ -15,14 +17,8 @@ export async function POST(req) {
     );
 
     const data = await response.json();
-
-    return new Response(
-      JSON.stringify({ code: data[0]?.generated_text || "" }),
-      { status: 200 }
-    );
+    return NextResponse.json({ result: data });
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), {
-      status: 500,
-    });
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
